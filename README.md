@@ -13,7 +13,7 @@ A sleek, space-themed web page that shows the **current moon phase** and the **n
 ![Today Moon](ss.png)  
 *Example of a moon phase display*
 
-### Try it out at: [Link](https://shyma22.github.io/Lunar-Phases/)
+### Try it out at: [Lunar Phases 🌙](https://shyma22.github.io/Lunar-Phases/)
 
 
    
