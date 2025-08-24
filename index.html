@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Moon Phases</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background-color: black;
+      color: white;
+      font-family: 'Playfair Display', serif;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      
+    }
+    
+    #moon img {
+      width: 400px;
+      margin-top: 40px;
+    }
+    h1 {
+      margin-top: 20px;
+      font-size: 2.2rem;
+    }
+    #sevenDays {
+      margin-top: 40px;
+      display: none;
+    }
+    .day {
+      display: inline-block;
+      margin: 15px;
+    }
+    .day img {
+      width: 100px;
+    }
+    button {
+      background: white;
+      color: black;
+      border: none;
+      padding: 10px 20px;
+      font-size: 1rem;
+      margin-top: 20px;
+      cursor: pointer;
+      border-radius: 5px;
+      font-family: 'Playfair Display', serif;
+    }
+    button:hover {
+      background: #ddd;
+    }
+    .title{
+        letter-spacing: 5px;
+    }
+  </style>
+</head>
+<body>
+    <h1 class="title">Lunar Phases</h1>
+
+  <h2>Moon Phase Today</h2>
+  <div id="moon"></div>
+  <button onclick="showSevenDays()">Next 7 Days</button>
+  <div id="sevenDays"></div>
+
+  <script>
+    const API_KEY = "44f798fb8cde42098f6143321250504";  // put your WeatherAPI key
+    const city = "London";
+
+    const moonImages = {
+      "New Moon": "new-moon.jpg",
+      "Waxing Crescent": "waxing-crescent.jpg",
+      "First Quarter": "first-quarter.jpg",
+      "Waxing Gibbous": "waxing-gibbous.jpg",
+      "Full Moon": "Unititled design.jpg",
+      "Waning Gibbous": "waning-gib.jpg",
+      "Last Quarter": "last-q.jpg",
+      "Waning Crescent": "waning-c.jpg"
+    };
+
+    async function getMoonPhase(date, containerId) {
+      const res = await fetch(
+        `https://api.weatherapi.com/v1/astronomy.json?key=${API_KEY}&q=${city}&dt=${date}`
+      );
+      const data = await res.json();
+      const phase = data.astronomy.astro.moon_phase;
+      const img = moonImages[phase] || "";
+      const html = `
+        <img src="${img}" alt="${phase}">
+        <p>${phase}</p>
+      `;
+      document.getElementById(containerId).innerHTML = html;
+    }
+
+    async function get7Days() {
+      const sevenDiv = document.getElementById("sevenDays");
+      sevenDiv.innerHTML = "";
+      for (let i = 1; i <= 7; i++) {
+        const d = new Date();
+        d.setDate(d.getDate() + i);
+        const date = d.toISOString().split("T")[0];
+
+        const res = await fetch(
+          `https://api.weatherapi.com/v1/astronomy.json?key=${API_KEY}&q=${city}&dt=${date}`
+        );
+        const data = await res.json();
+        const phase = data.astronomy.astro.moon_phase;
+        const img = moonImages[phase] || "";
+
+        const div = document.createElement("div");
+        div.className = "day";
+        div.innerHTML = `
+          <img src="${img}" alt="${phase}">
+          <p>${date}<br>${phase}</p>
+        `;
+        sevenDiv.appendChild(div);
+      }
+    }
+
+    function showSevenDays() {
+      document.getElementById("sevenDays").style.display = "block";
+      get7Days();
+    }
+
+    // Load today's moon on start
+    const today = new Date().toISOString().split("T")[0];
+    getMoonPhase(today, "moon");
+  </script>
+</body>
+</html>
+
