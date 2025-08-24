@@ -10,7 +10,7 @@ A sleek, space-themed web page that shows the **current moon phase** and the **n
 
 ## Screenshots
 
-![Today Moon](https://i.ibb.co/QbLWzvP/full.png)  
+![Today Moon](ss.png)  
 *Example of a moon phase display*
 
 
